@@ -4,10 +4,10 @@
 
 ## 需要的库
 
-* [itchat 1.1.11](https://github.com/littlecodersh/ItChat)
+* [ItChat 1.1.11](https://github.com/littlecodersh/ItChat)
 * [OpenCV 3.1.0](https://github.com/opencv/opencv)
-* [tensorflow 0.10.0rc0](https://github.com/tensorflow/tensorflow/tree/v0.10.0rc0)
-* [keras 1.1.0](https://github.com/fchollet/keras)
+* [TensorFlow 0.10.0rc0](https://github.com/tensorflow/tensorflow/tree/v0.10.0rc0)
+* [Keras 1.1.0](https://github.com/fchollet/keras)
 
 OpenCV 建议用 brew 安装。
 
