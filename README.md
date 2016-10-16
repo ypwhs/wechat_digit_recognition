@@ -115,7 +115,7 @@ if (w < 200) & (h < 200) & (h > 10) & (w > 10) & (1.1 < hw) & (hw < 5):
 * [Keras 中文版 模型介绍](http://keras-cn.readthedocs.io/en/latest/getting_started/sequential_model/)
 
 
-### 微信
+### 接收与发送
 
 收到任何人发过来的图片以后，程序自动下载图片，然后识别，保存标记识别好的数字的图片，发送给刚才发图片的人。
 
