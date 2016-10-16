@@ -1,5 +1,7 @@
 # 微信数字识别小程序
 
+本程序可实现一个自动识别图片上的数字的微信机器人（个人号）。
+
 ![](https://raw.githubusercontent.com/ypwhs/resources/master/WechatIMG57.jpeg)
 
 ## 需要的库
@@ -9,7 +11,7 @@
 * [TensorFlow 0.10.0rc0](https://github.com/tensorflow/tensorflow/tree/v0.10.0rc0)
 * [Keras 1.1.0](https://github.com/fchollet/keras)
 
-OpenCV 建议用 brew 安装。
+OpenCV 建议用 brew 安装，如果你用 macOS。
 
 ```shell
 brew install opencv3 --HEAD
