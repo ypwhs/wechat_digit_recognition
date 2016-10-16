@@ -13,19 +13,18 @@ model.load_weights('model.h5')
 model.summary()
 
 
-def resize(_img):  # resize img to 28*28
-    _fx = 28.0 / _img.shape[0]
-    _fy = 28.0 / _img.shape[1]
-    _fx = min(_fx, _fy)
-    _fy = _fx
-    _res = cv2.resize(_img, None, fx=_fx, fy=_fy, interpolation=cv2.INTER_CUBIC)
-    _outimg = np.ones((28, 28), dtype=np.uint8) * 255
-    _w = _res.shape[0]
-    _h = _res.shape[1]
-    _x = (28 - _w) / 2
-    _y = (28 - _h) / 2
-    _outimg[_x:_x + _w, _y:_y + _h] = _res
-    return _outimg
+def resize(rawimg):  # resize img to 28*28
+    fx = 28.0 / rawimg.shape[0]
+    fy = 28.0 / rawimg.shape[1]
+    fx = fy = min(fx, fy)
+    img = cv2.resize(rawimg, None, fx=fx, fy=fy, interpolation=cv2.INTER_CUBIC)
+    outimg = np.ones((28, 28), dtype=np.uint8) * 255
+    w = img.shape[1]
+    h = img.shape[0]
+    x = (28 - w) / 2
+    y = (28 - h) / 2
+    outimg[y:y+h, x:x+w] = img
+    return outimg
 
 
 def convert(imgpath):   # read digits
@@ -37,7 +36,7 @@ def convert(imgpath):   # read digits
 
     for rect in rects:
         x, y, w, h = rect
-        roi = gray[y:y + h, x:x + w]
+        roi = gray[y:y+h, x:x+w]
         hw = float(h) / w
         if (w < 200) & (h < 200) & (h > 10) & (w > 10) & (1.1 < hw) & (hw < 5):
             res = resize(roi)
@@ -47,7 +46,7 @@ def convert(imgpath):   # read digits
             predictions = model.predict(res)
             predictions = np.argmax(predictions)
             if predictions != 10:
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 1)
                 cv2.putText(img, '{:.0f}'.format(predictions), (x, y), cv2.FONT_HERSHEY_DUPLEX, h/25, (255, 0, 0))
     return img
 
