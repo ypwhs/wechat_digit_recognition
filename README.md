@@ -1,6 +1,6 @@
 # 微信数字识别小程序
 
-本程序可实现一个自动识别图片上的数字的微信机器人（个人号）。
+这是一个可以实现一个自动识别图片上的数字的微信机器人（个人号）。
 
 ![](https://raw.githubusercontent.com/ypwhs/resources/master/WechatIMG57.jpeg)
 
