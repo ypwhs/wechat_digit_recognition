@@ -184,3 +184,5 @@ elif msg.type == 'image':
 print reply
 
 ```
+
+<img width=70% src=https://raw.githubusercontent.com/ypwhs/resources/master/IMG_1167.PNG>
