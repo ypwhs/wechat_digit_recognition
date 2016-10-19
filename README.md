@@ -1,12 +1,16 @@
 # 微信数字识别小程序
 
-这是一个可以实现一个自动识别图片上的数字的微信机器人（个人号）。
+这是一个可以实现一个自动识别图片上的数字（仅支持白底黑字）的微信机器人。
 
-![](https://raw.githubusercontent.com/ypwhs/resources/master/WechatIMG57.jpeg)
+个人号代码：[wechat_digit_recognition.py](wechat_digit_recognition.py)
+
+公众号代码：[wx.py](wx.py)
 
 ## 需要的库
 
-* [ItChat 1.1.11](https://github.com/littlecodersh/ItChat)
+* [ItChat 1.1.11](https://github.com/littlecodersh/ItChat) (个人号需要)
+* [wechatpy 1.2.16](https://github.com/jxtech/wechatpy) (公众号需要)
+* [requests 2.1.11](https://github.com/kennethreitz/requests) (公众号需要)
 * [OpenCV 3.1.0](https://github.com/opencv/opencv)
 * [TensorFlow 0.10.0rc0](https://github.com/tensorflow/tensorflow/tree/v0.10.0rc0)
 * [Keras 1.1.0](https://github.com/fchollet/keras)
@@ -22,6 +26,8 @@ brew install opencv3 --HEAD
 ### 粗提取数字
 
 将图片转灰度，自适应二值化，提取轮廓，寻找最小矩形边界，判断是否满足预设条件，如宽、高，宽高比。
+
+![](https://raw.githubusercontent.com/ypwhs/resources/master/img1.png)
 
 ```python
 img = cv2.imread(imgpath)
@@ -47,6 +53,8 @@ for rect in rects:
 
 将满足条件的图片缩放至最大边长为28的小图，然后将其放入一个28\*28的白色图像的中心位置。这样做的原因是神经网络只接受28\*28的数据。
 
+![](https://raw.githubusercontent.com/ypwhs/resources/master/img2.png)
+
 ```python
 def resize(rawimg):
     fx = 28.0 / rawimg.shape[0]
@@ -66,6 +74,8 @@ def resize(rawimg):
 ### 识别
 
 将处理好的图片送入深度神经网络中运算，得到识别的结果。11类是因为0~9代表各个数字，10代表非数字。
+
+![](https://raw.githubusercontent.com/ypwhs/resources/master/WechatIMG57.jpeg)
 
 网络结构如下： 784->512->512->11
 
@@ -105,7 +115,7 @@ if (w < 200) & (h < 200) & (h > 10) & (w > 10) & (1.1 < hw) & (hw < 5):
     predictions = np.argmax(predictions)
     if predictions != 10:
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 1)
-        cv2.putText(img, '{:.0f}'.format(predictions), (x, y), cv2.FONT_HERSHEY_DUPLEX, h/25, (255, 0, 0))
+        cv2.putText(img, '{:.0f}'.format(predictions), (x, y), cv2.FONT_HERSHEY_DUPLEX, h/25.0, (255, 0, 0))
 
 ```
 
@@ -115,7 +125,7 @@ if (w < 200) & (h < 200) & (h > 10) & (w > 10) & (1.1 < hw) & (hw < 5):
 * [Keras 中文版 模型介绍](http://keras-cn.readthedocs.io/en/latest/getting_started/sequential_model/)
 
 
-### 接收与发送
+### 个人号
 
 收到任何人发过来的图片以后，程序自动下载图片，然后识别，保存标记识别好的数字的图片，发送给刚才发图片的人。
 
@@ -136,3 +146,41 @@ def download_files(msg):
 * [回复](http://itchat.readthedocs.io/zh/latest/5.Reply/)
 
 ![](https://raw.githubusercontent.com/ypwhs/resources/master/WechatIMG50.jpg)
+
+### 公众号
+
+首先需要配置 apache 支持 python cgi 应用，然后在公众号后台配置服务器，得到 token 和 EncodingAESKey。当有人发送消息时，会自动将消息 POST 到预设的地址（比如http://w.luckiestcat.com/wx.py），我们通过一系列代码下载图片，然后识别保存识别后的图片到服务器上，然后发送给刚才发图片的人。
+
+```python
+msg = parse_message(body_text)
+reply = ''
+if msg.type == 'text':
+    reply = create_reply('Text:' + msg.content.encode('utf-8'), message=msg)
+elif msg.type == 'image':
+    reply = create_reply('图片', message=msg)
+    try:
+        r = requests.get(msg.image) # download image
+        filename = 'img/' + str(int(time.time())) + '.jpg';
+        convertfilename = filename.replace('.', '.convert.')
+        with open(filename, 'w') as f:
+            f.write(r.content)
+        if cv2.imread(filename) is not None:
+            # load model
+            with open('model.json', 'r') as f:
+                model = model_from_json(f.read())
+            model.load_weights('model.h5')
+            
+            cv2.imwrite(convertfilename, convert(filename))
+            url = 'http://w.luckiestcat.com/' + convertfilename
+            reply = ArticlesReply(message=msg, articles=[{
+                'title': u'识别成功',
+                'url': url,
+                'description': u'',
+                'image': url
+            }])
+    except:
+        reply = create_reply('识别失败', message=msg)
+
+print reply
+
+```

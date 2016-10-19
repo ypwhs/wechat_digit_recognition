@@ -47,7 +47,7 @@ def convert(imgpath):   # read digits
             predictions = np.argmax(predictions)
             if predictions != 10:
                 cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 1)
-                cv2.putText(img, '{:.0f}'.format(predictions), (x, y), cv2.FONT_HERSHEY_DUPLEX, h/25, (255, 0, 0))
+                cv2.putText(img, '{:.0f}'.format(predictions), (x, y), cv2.FONT_HERSHEY_DUPLEX, h/25.0, (255, 0, 0))
     return img
 
 
