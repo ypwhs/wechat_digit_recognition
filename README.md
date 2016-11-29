@@ -149,7 +149,7 @@ def download_files(msg):
 
 ### 公众号
 
-首先需要配置 apache 支持 python cgi 应用，然后在公众号后台配置服务器，得到 token 和 EncodingAESKey。当有人发送消息时，会自动将消息 POST 到预设的地址（比如http://w.luckiestcat.com/wx.py），我们通过一系列代码下载图片，然后识别保存识别后的图片到服务器上，然后发送给刚才发图片的人。
+首先需要配置 apache 支持 python cgi 应用，然后在公众号后台配置服务器，得到 token 和 EncodingAESKey。当有人发送消息时，会自动将消息 POST 到预设的地址(比如:http://w.luckiestcat.com/wx.py)，我们通过一系列代码下载图片，然后识别保存识别后的图片到服务器上，然后发送给刚才发图片的人。
 
 ```python
 msg = parse_message(body_text)
