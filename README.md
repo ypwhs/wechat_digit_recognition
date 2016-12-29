@@ -6,6 +6,22 @@
 
 公众号代码：[wx.py](wx.py)
 
+# 构建模型
+
+## 数据集处理
+
+代码：[Preprocessing dataset.ipynb](Preprocessing dataset.ipynb)
+
+在线预览：[https://ypwhs.github.io/wechat_digit_recognition/Preprocessing dataset.html](https://ypwhs.github.io/wechat_digit_recognition/Preprocessing dataset.html)
+
+## 训练模型
+
+代码：[Training Model.ipynb](Training Model.ipynb)
+
+在线预览：[https://ypwhs.github.io/wechat_digit_recognition/Training Model.html](https://ypwhs.github.io/wechat_digit_recognition/Training Model.html)
+
+# 服务端的配置
+
 ## 需要的库
 
 * [ItChat 1.1.11](https://github.com/littlecodersh/ItChat) (个人号需要)
