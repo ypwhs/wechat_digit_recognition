@@ -2,3 +2,7 @@
 *.png
 *.jpg
 itchat.pkl
+*.tgz
+English
+train
+valid

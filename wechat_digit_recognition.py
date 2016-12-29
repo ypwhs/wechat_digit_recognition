@@ -40,8 +40,7 @@ def convert(imgpath):   # read digits
         hw = float(h) / w
         if (w < 200) & (h < 200) & (h > 10) & (w > 10) & (1.1 < hw) & (hw < 5):
             res = resize(roi)
-            res = cv2.bitwise_not(res)
-            res = np.resize(res, (1, 784))
+            res = np.resize(res, (1, 28, 28, 1))
 
             predictions = model.predict(res)
             predictions = np.argmax(predictions)
